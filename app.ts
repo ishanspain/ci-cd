@@ -9,6 +9,10 @@ app.get("/", (req, res) => {
 });
 
 app.post("/gw", (req, res) => {
+
+  const reqheaders = req.headers
+  console.log("req headers", reqheaders)
+
   const bcp = spawn("bash", ["s.sh"]);
 
   bcp.stdout.on("data", (data) => {
@@ -25,7 +29,7 @@ app.post("/gw", (req, res) => {
       console.error(`child process exited with code ${code}`);
       res.status(500).send(`child process exited with code ${code}`);
     } else {
-      console.log("script ran successfully");
+      console.log("script ran successfully", new Date().toLocaleString());
       res.send("script ran successfully");
     }
   });
