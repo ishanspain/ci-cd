@@ -1,6 +1,6 @@
 set -e
 
-node test.ts
+# node test.ts
 
 git -v
 

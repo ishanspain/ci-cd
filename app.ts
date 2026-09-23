@@ -1,0 +1,41 @@
+import express from "express";
+import { spawn } from "node:child_process";
+
+const app = express();
+const port = 3000;
+
+app.get("/", (req, res) => {
+  res.send("Hello from Express!");
+});
+
+app.post("/gw", (req, res) => {
+  const bcp = spawn("bash", ["s.sh"]);
+
+  bcp.stdout.on("data", (data) => {
+    process.stdout.write(`stdout: ${data}`);
+  });
+
+  bcp.stderr.on("data", (data) => {
+    process.stderr.write(`stderr: ${data}`);
+    // res.write(`stderr: ${data}`);
+  });
+
+  bcp.on("close", (code) => {
+    if (code !== 0) {
+      console.error(`child process exited with code ${code}`);
+      res.status(500).send(`child process exited with code ${code}`);
+    } else {
+      console.log("script ran successfully");
+      res.send("script ran successfully");
+    }
+  });
+
+  bcp.on("error", (err) => {
+    console.error(`Failed to start child process: ${err}`);
+    res.status(500).send(`Failed to start child process: ${err}`);
+  });
+});
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
