@@ -31,10 +31,15 @@ app.post("/gw", (req, res) => {
   }
 
   const signature = req.headers["x-hub-signature-256"] as string;
+
+  if (signature) {
+    return res.status(403).send("Invalid signature");
+  }
+
   const isSignValid = verifySign(signature, req.body);
 
   if (!isSignValid) {
-   return res.status(403).send("Webhook not valid");
+    return res.status(403).send("Webhook not valid");
   }
 
   console.log("is sign valid", signature, isSignValid);
