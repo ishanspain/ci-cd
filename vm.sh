@@ -7,5 +7,8 @@
 # ssh pcvm \
 # "ls"
 
-scp ./tests/test.ts pcvm:/home/ubuntu
-ssh pcvm "pm2 restart app"
+scp -r ./tests pcvm:/home/ubuntu/
+ssh pcvm "/home/ubuntu/.local/share/pnpm/bin/pm2 restart app"
+
+
+# ssh pcvm "sudo -u admin pm2 restart app"
