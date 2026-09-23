@@ -2,27 +2,24 @@ import express from "express";
 import { spawn } from "node:child_process";
 import { createHmacSign } from "./utils/hmac.ts";
 
-
 const app = express();
 const port = 3000;
 
-express.raw({ type: "application/json" })
+app.use(express.raw({ type: "application/json" }));
 
 app.get("/", (req, res) => {
   res.send("Hello from Express!");
 });
 
 app.post("/gw", (req, res) => {
-
   /* const reqheaders = req.headers
   console.log("req headers", reqheaders) */
-console.log("", req.body)
+  console.log("body data of gw", req.body);
 
   const signature = req.headers["x-hub-signature-256"];
   const expectedSign = createHmacSign(req.body);
 
-  console.log("signs")
-
+  console.log("signs", signature, expectedSign);
 
   res.status(202).send("Webhook accepted");
 
