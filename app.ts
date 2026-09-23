@@ -6,6 +6,8 @@ import { createHmacSign } from "./utils/hmac.ts";
 const app = express();
 const port = 3000;
 
+express.raw({ type: "application/json" })
+
 app.get("/", (req, res) => {
   res.send("Hello from Express!");
 });
@@ -14,6 +16,7 @@ app.post("/gw", (req, res) => {
 
   /* const reqheaders = req.headers
   console.log("req headers", reqheaders) */
+console.log("", req.body)
 
   const signature = req.headers["x-hub-signature-256"];
   const expectedSign = createHmacSign(req.body);
