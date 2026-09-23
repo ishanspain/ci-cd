@@ -1,23 +1,37 @@
 import crypto from "node:crypto";
 
-process.loadEnvFile(".env")
+process.loadEnvFile(".env");
 
-const WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET!;
+const WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET;
 
-export function createHmacSign(data: any) {
-  const expectedSignature =
-    "sha256=" +
-    crypto.createHmac("sha256", WEBHOOK_SECRET).update(data).digest("hex");
-  return expectedSignature;
+if (!WEBHOOK_SECRET) {
+  throw new Error("GITHUB_WEBHOOK_SECRET is missing");
 }
 
-/* const expectedSignature =
-  "sha256=" + crypto.createHmac("sha256", WEBHOOK_SECRET).digest("hex");
-console.log("web hook", expectedSignature); */
+export function createHmacSign(data: Buffer): string {
+  return (
+    "sha256=" +
+    crypto
+      .createHmac("sha256", WEBHOOK_SECRET!)
+      .update(data)
+      .digest("hex")
+  );
+}
 
-export function verifySign(signature: string, data: any) {
-  const expectedSignature = createHmacSign(data);
+export function verifySign(
+  signature: string | undefined,
+  data: Buffer,
+): boolean {
+  if (!signature) {
+    return false;
+  }
 
-  if (signature !== expectedSignature) return false;
-  return true;
+  const expected = Buffer.from(createHmacSign(data), "utf8");
+  const received = Buffer.from(signature, "utf8");
+
+  if (expected.length !== received.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(expected, received);
 }
