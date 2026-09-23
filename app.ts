@@ -13,6 +13,9 @@ app.post("/gw", (req, res) => {
   const reqheaders = req.headers
   console.log("req headers", reqheaders)
 
+
+  res.status(202).send("Webhook accepted");
+
   const bcp = spawn("bash", ["f.sh"]);
 
   bcp.stdout.on("data", (data) => {
@@ -21,22 +24,21 @@ app.post("/gw", (req, res) => {
 
   bcp.stderr.on("data", (data) => {
     process.stderr.write(`stderr: ${data}`);
-    // res.write(`stderr: ${data}`);
   });
 
   bcp.on("close", (code) => {
     if (code !== 0) {
       console.error(`child process exited with code ${code}`);
-      res.status(500).send(`child process exited with code ${code}`);
+      // res.status(500).send(`child process exited with code ${code}`);
     } else {
       console.log("script ran successfully", new Date().toLocaleString());
-      res.send("script ran successfully");
+      // res.send("script ran successfully");
     }
   });
 
   bcp.on("error", (err) => {
     console.error(`Failed to start child process: ${err}`);
-    res.status(500).send(`Failed to start child process: ${err}`);
+    // res.status(500).send(`Failed to start child process: ${err}`);
   });
 });
 
