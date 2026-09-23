@@ -13,7 +13,7 @@ app.post("/gw", (req, res) => {
   const reqheaders = req.headers
   console.log("req headers", reqheaders)
 
-  const bcp = spawn("bash", ["s.sh"]);
+  const bcp = spawn("bash", ["f.sh"]);
 
   bcp.stdout.on("data", (data) => {
     process.stdout.write(`stdout: ${data}`);
