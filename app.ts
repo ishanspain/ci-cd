@@ -1,5 +1,7 @@
 import express from "express";
 import { spawn } from "node:child_process";
+import { createHmacSign } from "./utils/hmac.ts";
+
 
 const app = express();
 const port = 3000;
@@ -10,8 +12,13 @@ app.get("/", (req, res) => {
 
 app.post("/gw", (req, res) => {
 
-  const reqheaders = req.headers
-  console.log("req headers", reqheaders)
+  /* const reqheaders = req.headers
+  console.log("req headers", reqheaders) */
+
+  const signature = req.headers["x-hub-signature-256"];
+  const expectedSign = createHmacSign(req.body);
+
+  console.log("signs")
 
 
   res.status(202).send("Webhook accepted");

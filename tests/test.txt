@@ -1,0 +1,39 @@
+req headers {
+  accept: '*/*',
+  host: 'localhost:3000',
+  'user-agent': 'GitHub-Hookshot/7d765d1',
+  'x-request-id': '69c69bc1c1ed66e40c8759744619748b',
+  'x-real-ip': '140.82.115.118',
+  'x-forwarded-port': '443',
+  'x-forwarded-scheme': 'https',
+  'x-original-uri': '/gw',
+  'x-scheme': 'https',
+  'x-github-delivery': '53244c9c-b727-11f1-9111-5be3c9fb932c',
+  'x-github-event': 'push',
+  'x-github-hook-id': '684175144',
+  'x-github-hook-installation-target-id': '1382950685',
+  'x-github-hook-installation-target-type': 'repository',
+  'x-hub-signature': 'sha1=3b31b722087b2dc231cade33d269285d51bc966e',
+  'x-hub-signature-256': 'sha256=40c77717e174a3645aee93cc5878c86a6b0d754a1eeafe30c615bff0b75a82fe',
+  'x-forwarded-proto': 'https',
+  'x-forwarded-host': 'zh4bx2wf-3000.inc1.devtunnels.ms',
+  'x-forwarded-for': '140.82.115.118',
+  'proxy-connection': 'Keep-Alive',
+  'content-type': 'application/x-www-form-urlencoded',
+  'content-length': '11632'
+}
+stdout: git version 2.54.0.windows.1
+stdout: v24.18.0
+stdout: frontend npm installed
+stdout: frontend tested
+frontend build
+frontend deployed
+script ran successfully 23/9/2026, 1:50:03 pm
+
+
+
+
+
+
+
+
