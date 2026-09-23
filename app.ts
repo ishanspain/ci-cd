@@ -1,11 +1,21 @@
 import express from "express";
 import { spawn } from "node:child_process";
-import { createHmacSign } from "./utils/hmac.ts";
+import { createHmacSign, verifySign } from "./utils/hmac.ts";
 
 const app = express();
 const port = 3000;
 
-app.use(express.raw({ type: "application/json" }));
+// app.use(express.raw({ type: "application/json" }));
+/* app.use(
+  express.raw({
+    type: "application/x-www-form-urlencoded",
+  }),
+); */
+app.use(
+  express.raw({
+    type: ["application/json", "application/x-www-form-urlencoded"],
+  }),
+);
 
 app.get("/", (req, res) => {
   res.send("Hello from Express!");
@@ -16,11 +26,18 @@ app.post("/gw", (req, res) => {
   console.log("req headers", reqheaders) */
   console.log("body data of gw", req.body);
 
-  const signature = req.headers["x-hub-signature-256"];
-  const expectedSign = createHmacSign(req.body);
+  if (!Buffer.isBuffer(req.body)) {
+    return res.status(400).send("Request body is required");
+  }
 
-  console.log("signs", signature, expectedSign);
+  const signature = req.headers["x-hub-signature-256"] as string;
+  const isSignValid = verifySign(signature, req.body);
 
+  if (!isSignValid) {
+   return res.status(403).send("Webhook not valid");
+  }
+
+  console.log("is sign valid", signature, isSignValid);
   res.status(202).send("Webhook accepted");
 
   const bcp = spawn("bash", ["f.sh"]);
